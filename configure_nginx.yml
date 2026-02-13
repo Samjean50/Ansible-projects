@@ -1,0 +1,43 @@
+- name: Configure Nginx website
+  hosts: web_servers
+  become: yes
+  tasks:
+    - name: Create website root directory
+      file:
+        path: /var/www/mywebsite
+        state: directory
+        mode: '0755'
+
+    - name: Deploy HTML content
+      copy:
+        content: |
+          <html>
+          <head><title>Welcome to My Website</title></head>
+          <body>
+          <h1>Hello from Nginx!</h1>
+          </body>
+          </html>
+        dest: /var/www/mywebsite/index.html
+
+    - name: Configure Nginx server block
+      copy:
+        content: |
+          server {"\n                 listen 80;\n                 server_name _;\n                 root /var/www/mywebsite;\n                 index index.html;\n                 location / {\n                     try_files $uri $uri/ =404;\n                 "}
+          }
+        dest: /etc/nginx/sites-available/mywebsite
+
+    - name: Enable the Nginx server block
+      file:
+        src: /etc/nginx/sites-available/mywebsite
+        dest: /etc/nginx/sites-enabled/mywebsite
+        state: link
+
+    - name: Remove default Nginx server block
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Reload Nginx
+      service:
+        name: nginx
+        state: reloaded

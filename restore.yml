@@ -1,0 +1,9 @@
+- name: Restore files from backup
+  hosts: web_servers
+  become: yes
+  tasks:
+    - name: Copy files back to original location
+      copy:
+        src: /backup/
+        dest: /home/ubuntu
+        remote_src: yes

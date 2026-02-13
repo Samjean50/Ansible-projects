@@ -1,0 +1,15 @@
+- name: Backup files on the server
+  hosts: webserver
+  become: yes
+  tasks:
+    - name: Create backup directory
+      file:
+        path: /backup
+        state: directory
+        mode: '0755'
+    
+    - name: Create compressed backup archive
+      archive:
+        path: /home/ubuntu
+        dest: /backup/backup_{{ ansible_date_time.date }}.tar.gz
+        format: gz
