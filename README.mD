@@ -106,7 +106,7 @@ ssh -i ~/.ssh/wordpress.pem ubuntu@<target-server-ip> \
 
 ```bash
 ssh-copy-id ubuntu@<target-server-ip>
-ssh-copy-id -f "-o IdentityFile /Users/celeb/Downloads" ubuntu@13.222.130.176
+ssh-copy-id -f "-o IdentityFile /path/to/file" user@<server-ip>
 ```
 
 #### Test Passwordless Connection
